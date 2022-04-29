@@ -1,10 +1,9 @@
 import turtle
 from turtle import Screen, Turtle
 import pandas
-#
+
 screen = Screen()
 screen.title("us_states_game")
-screen.setup(width=730, height=500)
 
 image = "blank_states_img.gif"
 screen.addshape(image)
@@ -24,9 +23,9 @@ def create_turtle(x, y, input):
     new_turtle.speed("fastest")
     new_turtle.write(input, align="center", font=("Arial", 12, ""))
 
+
 count = 0
-game_on = True
-while game_on:
+while count < 50:
     for state in state_list:
         if answer_state == state.lower():
             count += 1
@@ -36,7 +35,5 @@ while game_on:
             create_turtle(x_cor, y_cor, state)
 
     answer_state = turtle.textinput(f"{count}/50 States Correct", prompt="What's another state's name").lower()
-    if count == 50:
-        game_on = False
 
 screen.mainloop()
