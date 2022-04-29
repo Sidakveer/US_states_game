@@ -9,7 +9,7 @@ image = "blank_states_img.gif"
 screen.addshape(image)
 turtle.shape(image)
 
-answer_state = screen.textinput("Guess a State", prompt="What's another state's name").lower()
+# answer_state = screen.textinput("Guess a State", prompt="What's another state's name").title()
 
 data = pandas.read_csv("50_states.csv")
 state_list = (data.state).tolist()
@@ -24,16 +24,23 @@ def create_turtle(x, y, input):
     new_turtle.write(input, align="center", font=("Arial", 12, ""))
 
 
-count = 0
-while count < 50:
-    for state in state_list:
-        if answer_state == state.lower():
-            count += 1
-            state_data = data[data.state == state]
-            x_cor = int(state_data.x)
-            y_cor = int(state_data.y)
-            create_turtle(x_cor, y_cor, state)
+guess_list = []
+remaining_states_list = []
+while len(guess_list) < 50:
 
-    answer_state = turtle.textinput(f"{count}/50 States Correct", prompt="What's another state's name").lower()
+    answer_state = turtle.textinput(f"{len(guess_list)}/50 States Correct", prompt="What's another state's name").title()
 
-screen.mainloop()
+    if answer_state == "Exit":
+        for state in state_list:
+            if state not in guess_list:
+                remaining_states_list.append(state)
+        new_data = pandas.DataFrame(remaining_states_list)
+        new_data.to_csv("states_to_learn.csv")
+        break
+
+    if answer_state in state_list:
+        guess_list.append(answer_state)
+        state_data = data[data.state == answer_state]
+        x_cor = int(state_data.x)
+        y_cor = int(state_data.y)
+        create_turtle(x_cor, y_cor, answer_state)
